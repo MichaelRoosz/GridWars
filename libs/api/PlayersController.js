@@ -168,10 +168,16 @@ const handlePlayerAttack = function(player) {
         const otherPlayer = findPlayerByPosition(attackPosition);
 
         if (otherPlayer) {
-            otherPlayer.health -= getRandomInt(0, player.level + 1);
+
+            if (otherPlayer.level < player.level) {
+                otherPlayer.health -= getRandomInt(0, player.otherPlayer);
+
+            } else {
+                otherPlayer.health -= (getRandomInt(0, player.level) + getRandomInt(0, Math.floor((otherPlayer.level - player.level) / 2)));
+            }
 
             if (otherPlayer.isDead()) {
-                player.kills += 1;
+                player.kills += Math.max(1, otherPlayer.level - player.level);
             }
         }
     } catch (e) {
@@ -303,7 +309,9 @@ const handlePlayerActions = function(action) {
     Helper.output('Doing the action : ' + action);
 
     players.forEach(function(player) {
-        event(player);
+        if (player.health > 0) {
+            event(player);
+        }
     });
 };
 
