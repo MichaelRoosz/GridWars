@@ -65,7 +65,7 @@ const parsePlayers = function() {
 };
 
 const getRandomInt = function(min, max) {
-    return Math.floor(Math.random() * (max - min)) + min;
+    return Math.floor(Math.random() * (max + 1 - min)) + min;
 };
 
 const isPositionAvailable = function(position) {
@@ -91,8 +91,8 @@ router.post('/', function(req, res) {
 
     let maxTries = 10;
     let position = {
-        x: getRandomInt(0, mapSizeX),
-        y: getRandomInt(0, mapSizeY),
+        x: getRandomInt(0, mapSizeX - 1),
+        y: getRandomInt(0, mapSizeY - 1),
     };
 
     while (!isPositionAvailable(position) && maxTries--) {
@@ -112,7 +112,7 @@ router.post('/', function(req, res) {
     player.position = position;
     player.name = req.body.name;
     player.color = req.body.color || ((Math.random() * 0xffffff) << 0).toString(16);
-    player.animationDelay = getRandomInt(1, 6);
+    player.animationDelay = getRandomInt(1, 5);
 
     playersList.push(player);
 
