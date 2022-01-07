@@ -170,7 +170,7 @@ const handlePlayerAttack = function(player) {
         if (otherPlayer) {
 
             if (otherPlayer.level < player.level) {
-                otherPlayer.health -= getRandomInt(0, player.otherPlayer);
+                otherPlayer.health -= getRandomInt(0, otherPlayer.level);
 
             } else {
                 otherPlayer.health -= (getRandomInt(0, player.level) + getRandomInt(0, Math.floor((otherPlayer.level - player.level) / 2)));
