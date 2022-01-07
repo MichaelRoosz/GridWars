@@ -27,7 +27,7 @@ const broadcastResult = players => {
         if (client.readyState === WebSocket.OPEN) {
             client.send(
                 JSON.stringify({
-                    players,
+                    players: players,
                     map: { width : mapSizeX, height : mapSizeY, speed, obstacles : Obstacles.map },
                 })
             );
@@ -67,6 +67,10 @@ const parsePlayers = function() {
 const getRandomInt = function(min, max) {
     return Math.floor(Math.random() * (max + 1 - min)) + min;
 };
+
+const insertPlayer = function (player) {
+    playersList.splice(Math.floor(Math.random() * (playersList.length + 1)), 0, player);
+}
 
 const isPositionAvailable = function(position) {
     return (
@@ -114,7 +118,7 @@ router.post('/', function(req, res) {
     player.color = req.body.color || ((Math.random() * 0xffffff) << 0).toString(16);
     player.animationDelay = getRandomInt(1, 5);
 
-    playersList.push(player);
+    insertPlayer(player);
 
     const sendWithId = true;
     res.json(player.parse(sendWithId));
@@ -169,7 +173,10 @@ const handlePlayerAttack = function(player) {
 
         if (otherPlayer) {
 
-            if (otherPlayer.level < player.level) {
+            if (player.level === 1) {
+                otherPlayer.health -= 2;
+            }
+            else if (otherPlayer.level < player.level) {
                 otherPlayer.health -= getRandomInt(0, otherPlayer.level);
 
             } else {
