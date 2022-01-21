@@ -1,4 +1,6 @@
 const express = require('express');
+const schedule = require('node-schedule');
+const fs = require('fs')
 
 const app = express();
 const router = express.Router();
@@ -176,8 +178,8 @@ const handlePlayerAttack = function(player) {
             if (player.level === 1) {
                 otherPlayer.health -= 2;
             }
-            else if (otherPlayer.level < player.level) {
-                otherPlayer.health -= getRandomInt(0, otherPlayer.level);
+            else if (otherPlayer.level < (player.level - 1)) {
+                otherPlayer.health -= getRandomInt(0, 1);
 
             } else {
                 otherPlayer.health -= (getRandomInt(0, player.level) + getRandomInt(0, Math.floor((otherPlayer.level - player.level) / 2)));
@@ -323,5 +325,15 @@ const handlePlayerActions = function(action) {
 };
 
 const gameInterval = setInterval(gameUpdate, speed);
+
+const job = schedule.scheduleJob('0 * * * *', function(){
+    console.log('Saving game state...');
+    try {
+        fs.writeFileSync("game-" + Date.now() +".log", JSON.stringify(playersList));
+        console.log(JSON.stringify(playersList));
+    } catch (err) {
+        console.error(err);
+    }
+});
 
 module.exports = router;
