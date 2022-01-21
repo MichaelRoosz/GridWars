@@ -174,19 +174,10 @@ const handlePlayerAttack = function(player) {
         const otherPlayer = findPlayerByPosition(attackPosition);
 
         if (otherPlayer) {
-
-            if (player.level === 1) {
-                otherPlayer.health -= 2;
-            }
-            else if (otherPlayer.level < (player.level - 1)) {
-                otherPlayer.health -= getRandomInt(0, 1);
-
-            } else {
-                otherPlayer.health -= (getRandomInt(0, player.level) + getRandomInt(0, Math.floor((otherPlayer.level - player.level) / 2)));
-            }
+            otherPlayer.health -= getRandomInt(0, player.level);
 
             if (otherPlayer.isDead()) {
-                player.kills += Math.max(1, otherPlayer.level - player.level);
+                player.kills += 1;
             }
         }
     } catch (e) {
