@@ -204,8 +204,9 @@ const handlePlayerDestroy = function(player) {
         const victim = findPlayerByPosition(kamikazePosition);
 
         player.health = 0;
-        victim.health = 0;
-
+        if(victim) {
+            victim.health = 0;
+        }
     } catch (e) {
         Helper.output(e);
     }
