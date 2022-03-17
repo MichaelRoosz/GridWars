@@ -174,10 +174,22 @@ const handlePlayerAttack = function(player) {
         const otherPlayer = findPlayerByPosition(attackPosition);
 
         if (otherPlayer) {
-            otherPlayer.health -= getRandomInt(0, player.level);
+
+            if (otherPlayer.level  > (player.level + 3)) {
+                otherPlayer.health -= getRandomInt(2, (otherPlayer.level / player.level));
+            } else {
+                otherPlayer.health -= getRandomInt(0, player.level);
+            }
+
 
             if (otherPlayer.isDead()) {
-                player.kills += 1;
+                
+                if (otherPlayer.level  > (player.level + 3)) {
+                    player.kills += 2;
+                } else {
+                    player.kills += 1;
+                }
+
             }
         }
     } catch (e) {
@@ -187,7 +199,13 @@ const handlePlayerAttack = function(player) {
 
 const handlePlayerDestroy = function(player) {
     try {
+        
+        const kamikazePosition = player.getActionPosition();
+        const victim = findPlayerByPosition(kamikazePosition);
+
         player.health = 0;
+        victim.health = 0;
+
     } catch (e) {
         Helper.output(e);
     }
@@ -216,7 +234,12 @@ const handlePlayerMove = function(player) {
 const handlePlayerHeal = function(player) {
     try {
         //player.increaseHitPoints(player.level);
-        player.increaseHitPoints(1);
+
+        if (player.level < 3) {
+            player.increaseHitPoints(player.level);
+        } else {
+            player.increaseHitPoints(1);
+        }
     } catch (e) {
         Helper.output(e);
     }
@@ -232,6 +255,16 @@ const disposeBodies = function() {
             playersList.splice(i, 1);
         }
     }
+};
+
+const randomDeath = function() {
+    let i = playersList.length;
+    let randomNumber = getRandomInt(0,500);
+    if ( i > randomNumber ) {
+        const player = playersList[randomNumber];
+        player.health = 0;
+    }
+
 };
 
 const resetPlayersOrders = function() {
@@ -252,6 +285,8 @@ const gameUpdate = function() {
     Helper.output(`Game round ${gameRound++}`);
 
     if (playersList.length) {
+        randomDeath();
+
         handlePlayerActions(Action.ORDER_ATTACK);
         handlePlayerActions(Action.ORDER_DESTROY);
 
