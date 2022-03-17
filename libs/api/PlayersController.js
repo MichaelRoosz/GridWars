@@ -183,7 +183,13 @@ const handlePlayerAttack = function(player) {
 
 
             if (otherPlayer.isDead()) {
-                player.kills += 1;
+                
+                if (otherPlayer.level  > (player.level + 3)) {
+                    player.kills += 2;
+                } else {
+                    player.kills += 1;
+                }
+
             }
         }
     } catch (e) {
@@ -280,7 +286,7 @@ const gameUpdate = function() {
 
     if (playersList.length) {
         randomDeath();
-        
+
         handlePlayerActions(Action.ORDER_ATTACK);
         handlePlayerActions(Action.ORDER_DESTROY);
 
