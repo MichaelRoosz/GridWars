@@ -17,6 +17,7 @@ function Player() {
     this.position = { x: 0, y: 0 };
     this.color = '92278f';
     this.animationDelay = 0;
+    this.powerUp = '';
 }
 
 Player.prototype.parse = function(withId) {
@@ -29,6 +30,7 @@ Player.prototype.parse = function(withId) {
         position: this.position,
         color: this.color,
         animationDelay: this.animationDelay,
+        powerUp: this.powerUp,
     };
 
     if (withId) {

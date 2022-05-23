@@ -13,6 +13,7 @@ const Config = require('../config');
 
 const Obstacles = new require('../classes/Obstacles.js')(Config);
 const Helper = new require('../classes/Helper.js');
+const PowerUp = new require('../classes/PowerUp.js')(Config);
 
 const mapSizeX = Config.MAP_SIZE_X;
 const mapSizeY = Config.MAP_SIZE_Y;
@@ -30,7 +31,13 @@ const broadcastResult = players => {
             client.send(
                 JSON.stringify({
                     players: players,
-                    map: { width : mapSizeX, height : mapSizeY, speed, obstacles : Obstacles.map },
+                    map: {
+                        width : mapSizeX,
+                        height : mapSizeY,
+                        speed,
+                        obstacles : Obstacles.map,
+                        powerUp: PowerUp.map
+                    },
                 })
             );
         }
@@ -163,7 +170,13 @@ router.get('/', function(req, res) {
 
     res.json({
         players: parsePlayers(),
-        map: { width : mapSizeX, height : mapSizeY, speed, obstacles : Obstacles.map },
+        map: {
+            width : mapSizeX,
+            height : mapSizeY,
+            speed,
+            obstacles : Obstacles.map,
+            powerUp: PowerUp.map
+        },
     });
 });
 
@@ -299,6 +312,8 @@ const gameUpdate = function() {
         handlePlayerActions(Action.ORDER_HEAL);
 
         resetPlayersOrders();
+
+        PowerUp.generate(isPositionAvailable);
     }
 
     broadcastResult(parsePlayers());

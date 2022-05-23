@@ -45,6 +45,7 @@ const Game = () => {
                         position: { x, y },
                         color,
                         animationDelay,
+                        powerUp
                     } = player;
                     return (
                         <Player
@@ -55,6 +56,7 @@ const Game = () => {
                             y={y}
                             color={color}
                             animationDelay={animationDelay}
+                            powerUp={powerUp}
                             key={`player${player.name}`}
                         />
                     );
