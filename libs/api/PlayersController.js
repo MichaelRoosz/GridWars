@@ -13,7 +13,10 @@ const Config = require('../config');
 
 const Obstacles = new require('../classes/Obstacles.js')(Config);
 const Helper = new require('../classes/Helper.js');
-const PowerUp = new require('../classes/PowerUp.js')(Config);
+Helper.output(Obstacles.obstacles);
+Helper.output(typeof(Obstacles.obstacles));
+
+const PowerUp = new require('../classes/PowerUp.js')(Config, Obstacles.obstacles);
 
 const mapSizeX = Config.MAP_SIZE_X;
 const mapSizeY = Config.MAP_SIZE_Y;
@@ -188,7 +191,9 @@ const handlePlayerAttack = function(player) {
 
         if (otherPlayer) {
 
-            if (otherPlayer.level  > (player.level + 3)) {
+            if (player.powerUp == "damage") {
+                otherPlayer.health = 0;
+            } else if (otherPlayer.level  > (player.level + 3)) {
                 otherPlayer.health -= getRandomInt(2, (otherPlayer.level / player.level));
             } else {
                 otherPlayer.health -= getRandomInt(0, player.level);
@@ -232,7 +237,8 @@ const handlePlayerMove = function(player) {
         if (Obstacles.checkPositionDamage(movePosition)) {
             player.health--;
             Helper.output(`${player.name} is taking damage of obstacle`);
-
+        } else if (PowerUp.checkPowerUpPosition(movePosition)) {
+            player.powerUp = "damage";
         } else if (!isPositionAvailable(movePosition)) {
             //throw new Error(`${player.id} something is in my way`);
             Helper.output(`${player.name} something is in my way`);
