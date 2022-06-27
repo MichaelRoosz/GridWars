@@ -13,8 +13,6 @@ const Config = require('../config');
 
 const Obstacles = new require('../classes/Obstacles.js')(Config);
 const Helper = new require('../classes/Helper.js');
-Helper.output(Obstacles.obstacles);
-Helper.output(typeof(Obstacles.obstacles));
 
 const PowerUp = new require('../classes/PowerUp.js')(Config, Obstacles.obstacles);
 
@@ -39,7 +37,7 @@ const broadcastResult = players => {
                         height : mapSizeY,
                         speed,
                         obstacles : Obstacles.map,
-                        powerUp: PowerUp.map
+                        powerUps: PowerUp.map
                     },
                 })
             );
@@ -191,7 +189,7 @@ const handlePlayerAttack = function(player) {
 
         if (otherPlayer) {
 
-            if (player.powerUp == "damage") {
+            if (player.powerUp === "damage") {
                 otherPlayer.health = 0;
             } else if (otherPlayer.level  > (player.level + 3)) {
                 otherPlayer.health -= getRandomInt(2, (otherPlayer.level / player.level));
@@ -238,7 +236,10 @@ const handlePlayerMove = function(player) {
             player.health--;
             Helper.output(`${player.name} is taking damage of obstacle`);
         } else if (PowerUp.checkPowerUpPosition(movePosition)) {
+            Helper.output(`${player.name} picked up a power up`);
             player.powerUp = "damage";
+            player.powerUpDuration = 20;
+            PowerUp.removePowerUp(movePosition);
         } else if (!isPositionAvailable(movePosition)) {
             //throw new Error(`${player.id} something is in my way`);
             Helper.output(`${player.name} something is in my way`);
@@ -290,6 +291,11 @@ const randomDeath = function() {
 const resetPlayersOrders = function() {
     playersList.forEach(function(player) {
         player.action.order = Action.ORDER_STOP;
+        if (player.powerUpDuration === 0) {
+            player.powerUp = '';
+        } else {
+            player.powerUpDuration --; 
+        }
     });
 };
 

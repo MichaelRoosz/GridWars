@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import Player from './Player';
 import Obstacles from './Obstacles';
+import PowerUps from './PowerUp';
 import GameData from './GameData';
 import { getMapData, setMapData, getBoardData, setBoardData } from './config';
 
@@ -37,6 +38,7 @@ const Game = () => {
                 style={{ height: boardHeight, fontSize }}
             >
                 {boardHeight && <Obstacles />}
+                {boardHeight && <PowerUps />}
                 {players.map(player => {
                     const {
                         name,

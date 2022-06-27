@@ -20,15 +20,15 @@ const getPowerUp = () => {
 
 const PowerUps = () => {
     const { powerUps } = getMapData();
-    return powerUps.map(powerUp => <PowerUp key={'obst_'+ powerUp.id} {...powerUp} />);
+    return powerUps.map(powerUp => <PowerUp key={'pwu_'+ powerUp.id} {...powerUp} />);
 };
 
-const powerUp = React.memo(props => {
+const PowerUp = React.memo(props => {
     const { x, y, type, damage, id } = props;
     const SvgImage = getPowerUp();
 
     return (
-        <div className="powerUp" key={'obst_'+ id.toString} style={calculatePowerUpStyles(x, y)}>
+        <div className="powerUps" key={'pwu_'+ id.toString} style={calculatePowerUpStyles(x, y)}>
             <SvgImage/>
         </div>
     );

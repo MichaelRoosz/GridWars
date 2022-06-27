@@ -1,26 +1,21 @@
 const Helper = new require('./Helper.js');
 class PowerUp {
 
-    constructor(config, Obstacles) {
-        Helper.output(Obstacles);
-        Helper.output(`constructor`);
-        Helper.output(config);
+    constructor(config, obstacles) {
         this.config = config;
-        this.obstacles = Obstacles;
-        Helper.output(this.obstacles);
         this.powerUps = [];
+        this.obstacles = obstacles;
         this.generate();
     }
 
     get map() {
-        Helper.output(`get power rune map`);
         return this.powerUps;
     }
 
     generate(isPositionAvailable) {
         let b = null;
-        b = this.randomInt(0, 1);
-        Helper.output(b);
+        b = this.randomInt(0, 100);
+        b = 0;
         if (b == 0) {
             Helper.output(`Generate Power Rune`);
 
@@ -28,14 +23,13 @@ class PowerUp {
             let y = null;
 
             while (
-                x === null ||
-                this.checkPowerUpPosition({x, y}) === true
+                x === null || this.checkPowerUpPosition({x, y,}) === true
             ) {
                 x = this.randomInt(0, this.config.MAP_SIZE_X - 1);
                 y = this.randomInt(0, this.config.MAP_SIZE_Y - 1);
             }
 
-            if (isPositionAvailable) {
+            if (isPositionAvailable && !this.checkObstaclesPosition({x, y})) {
                 this.powerUps.push({
                     id : this.powerUps.length + 1,
                     x,
@@ -44,13 +38,27 @@ class PowerUp {
                 });
             }
 
-            Helper.output(this.powerUps);
-
             return this.powerUps;
         }
     }
 
     checkPowerUpPosition(position) {
+        const size = this.powerUps.length;
+
+        if (!size) {
+            return false;
+        }
+
+        for (let i = 0; i < size; i++) {
+            if (this.powerUps[i].x === position.x && this.powerUps[i].y === position.y) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+
+    checkObstaclesPosition(position) {
         const size = this.obstacles.length;
 
         if (!size) {
@@ -70,6 +78,23 @@ class PowerUp {
         return Math.floor(Math.random() * (high - low + 1) + low)
     }
 
+    removePowerUp(movePosition) {
+        let
+        id = null;
+    
+        this.powerUps.forEach(function(powerUp) {
+            if (powerUp.x === movePosition.x && powerUp.y === movePosition.y) {
+                id = powerUp.id;
+            }
+        });
+
+        var index = this.powerUps.map(x => {
+            return x.id;
+        }).indexOf(id);
+
+        this.powerUps.splice(index, 1);
+    }
+
 }
 
-module.exports = (config) => { return new PowerUp(config) }
+module.exports = (config, powerUp) => { return new PowerUp(config, powerUp) }
