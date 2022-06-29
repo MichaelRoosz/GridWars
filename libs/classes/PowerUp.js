@@ -14,8 +14,7 @@ class PowerUp {
 
     generate(isPositionAvailable) {
         let b = null;
-        b = this.randomInt(0, 100);
-        b = 0;
+        b = this.randomInt(0, 50);
         if (b == 0) {
             Helper.output(`Generate Power Rune`);
 
