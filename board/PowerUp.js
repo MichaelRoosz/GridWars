@@ -28,7 +28,7 @@ const PowerUp = React.memo(props => {
     const SvgImage = getPowerUp();
 
     return (
-        <div className="powerUps" key={'pwu_'+ id.toString} style={calculatePowerUpStyles(x, y)}>
+        <div className="powerUp" key={'pwu_'+ id.toString} style={calculatePowerUpStyles(x, y)}>
             <SvgImage/>
         </div>
     );
