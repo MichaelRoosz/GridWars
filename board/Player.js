@@ -44,7 +44,7 @@ const calculateStyles = player => {
 };
 
 const Player = React.memo(props => {
-    const { level, name, color, animationDelay , health} = props;
+    const { level, name, color, animationDelay , health, powerUp} = props;
     const { top, left, width, height, opacity } = calculateStyles(props);
     const Avatar = getAvatar(level);
 
